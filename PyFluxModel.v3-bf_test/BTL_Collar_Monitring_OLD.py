@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import os
 import datetime
-from slope_analysis_new import *
+from slope_analysis import *
 
 # Sample ID
+measurement_devices = ["bucket_sediment", "bucket_snow", "chamber"]
 gases = ["CH4", "CO2"]
 cwd = os.getcwd()
 output_folder = os.path.join(cwd, "outputs")
@@ -92,6 +93,12 @@ for row in torun_rows:
     else:
         print("No location for row: " + str(row))
         sample_ID = sample_ID + "_unentered"
+    if master_data.iloc[row]["measurement_device"] not in measurement_devices:
+        print("Invalid measurement_device: " + str(master_data.iloc[row]["measurement_device"]))
+        print("Found in row: " + str(row))
+        exit()
+    else:
+        sample_ID = sample_ID + "_" + str(master_data.iloc[row]["measurement_device"])
     if master_data.iloc[row]["gas"] not in gases:
         print("Invalid gas: " + str(master_data.iloc[row]["gas"]))
         print("Found in row: " + str(row))
